@@ -3,9 +3,14 @@ using UnityEngine;
 public class MantleController : MonoBehaviour
 {
     public Camera mainCamera; // Assign your isometric camera in the inspector
-    public float rotationSpeed = 100f;
-    public float plainHeight = 1f; // Height of the isometric plane
+    private float rotationSpeed;
+    private float plainHeight;
 
+    void Start()
+    {
+        rotationSpeed = GameManager.instance.playerSettings.mantleRotationSpeed;
+        plainHeight = GameManager.instance.playerSettings.mantlePlaneHeight;
+    }
     void Update()
     {
         RotateMantleTowardsCursor();

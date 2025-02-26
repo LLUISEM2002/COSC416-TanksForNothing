@@ -2,12 +2,14 @@ using UnityEngine;
 
 public class TankController : MonoBehaviour
 {
-    public float moveSpeed = 5f;  
-    public float rotationSpeed = 100f;
     private Rigidbody rb;
+    private float moveSpeed; 
+    private float rotationSpeed;
 
     void Start()
     {
+        moveSpeed = GameManager.instance.playerSettings.tankMoveSpeed;
+        rotationSpeed = GameManager.instance.playerSettings.tankRotationSpeed;
         rb = GetComponent<Rigidbody>();
     }
 
