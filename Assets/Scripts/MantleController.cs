@@ -7,10 +7,12 @@ public class MantleController : MonoBehaviour
 
     private float rotationSpeed;
     private float textureScaleFactor; // Scale factor for adjusting input coordinates
+    private float plainHeight;
 
     void Start()
     {
         rotationSpeed = GameManager.instance.playerSettings.mantleRotationSpeed;
+        plainHeight = GameManager.instance.playerSettings.mantlePlaneHeight;
 
         // Calculate scale factor based on actual screen resolution and low-res texture
         if (lowResTexture != null)
@@ -40,25 +42,37 @@ public class MantleController : MonoBehaviour
         // Get mouse position and scale it to match the low-res texture
         Vector3 mousePosition = Input.mousePosition / textureScaleFactor;
 
-        // Convert screen position to world position using a raycast
-        Ray ray = mainCamera.ScreenPointToRay(mousePosition);
-        Plane gamePlane = new Plane(Vector3.up, transform.position); // Assume mantle is on the ground plane
+        Vector3 mouseWorldPosition = ScreenToIsometricWorld(mousePosition);
+
+        Vector3 direction = (mouseWorldPosition - transform.position);
+        direction.y = 0; // Keep rotation flat
+
+        if (direction.magnitude > 0.01f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            
+            // Smoothly interpolate towards target rotation
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation, // Current rotation
+                targetRotation,     // Target rotation
+                rotationSpeed * Time.deltaTime // Interpolation factor (adjustable)
+            );
+        }
+
+    }
+    Vector3 ScreenToIsometricWorld(Vector3 screenPosition)
+    {
+        // Convert screen position to world using a raycast projection on the fixed game plane
+        Ray ray = mainCamera.ScreenPointToRay(screenPosition);
+        Vector3 planePosition = new Vector3(0, plainHeight, 0); // Set Y = 1 for the game plane
+        Plane gamePlane = new Plane(Vector3.up, planePosition);
 
         if (gamePlane.Raycast(ray, out float enter))
         {
-            Vector3 mouseWorldPosition = ray.GetPoint(enter);
-
-            // Compute direction in XZ plane only
-            Vector3 direction = new Vector3(mouseWorldPosition.x - transform.position.x, 0, mouseWorldPosition.z - transform.position.z);
-
-            if (direction.magnitude > 0.01f)
-            {
-                Quaternion targetRotation = Quaternion.LookRotation(direction);
-                
-                // Smooth rotation around Y-axis
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-            }
+            return ray.GetPoint(enter);
         }
+
+        return Vector3.zero; // Fallback in case the raycast fails
     }
 }
 
