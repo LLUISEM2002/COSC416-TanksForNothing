@@ -29,5 +29,5 @@ public class PlayerSettings
 
     [Header("Mantle Settings")]
     public float mantleRotationSpeed = 5f;
-    public float mantlePlaneHeight = 1f;
+    public float mantlePlaneHeight = 1f; 
 }
