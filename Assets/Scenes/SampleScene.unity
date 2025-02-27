@@ -374,7 +374,6 @@ MonoBehaviour:
     tankRotationSpeed: 60
     rotationSnap: 10
     mantleRotationSpeed: 5
-    mantlePlaneHeight: -1
 --- !u!1 &613568593
 GameObject:
   m_ObjectHideFlags: 0
@@ -403,7 +402,7 @@ Transform:
   m_GameObject: {fileID: 613568593}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.100000024, z: 0.8}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.3, y: 0.3, z: 0.6}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -776,7 +775,7 @@ Transform:
   m_GameObject: {fileID: 1358950774}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.100000024, z: 1.075}
+  m_LocalPosition: {x: 0, y: 0, z: 0.275}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1147,7 +1146,7 @@ Transform:
   m_GameObject: {fileID: 2071264918}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1166,6 +1165,22 @@ PrefabInstance:
     - target: {fileID: 356807741454969736, guid: bcc0032ee4b3e9449aab7ae61c72cbc2, type: 3}
       propertyPath: m_Name
       value: Tank
+      objectReference: {fileID: 0}
+    - target: {fileID: 799569268692223799, guid: bcc0032ee4b3e9449aab7ae61c72cbc2, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1356115834550104766, guid: bcc0032ee4b3e9449aab7ae61c72cbc2, type: 3}
+      propertyPath: m_Name
+      value: Mantle
+      objectReference: {fileID: 0}
+    - target: {fileID: 6689129567046732263, guid: bcc0032ee4b3e9449aab7ae61c72cbc2, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6689129567046732263, guid: bcc0032ee4b3e9449aab7ae61c72cbc2, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7229769022158779240, guid: bcc0032ee4b3e9449aab7ae61c72cbc2, type: 3}
       propertyPath: mainCamera
