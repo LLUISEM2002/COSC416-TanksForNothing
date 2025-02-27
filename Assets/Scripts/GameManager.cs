@@ -26,6 +26,7 @@ public class PlayerSettings
     [Header("Tank Settings")]
     public float tankMoveSpeed = 5f;
     public float tankRotationSpeed = 100f;
+    public int rotationSnap = 10;
 
     [Header("Mantle Settings")]
     public float mantleRotationSpeed = 5f;
