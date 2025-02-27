@@ -12,7 +12,7 @@ public class MantleController : MonoBehaviour
     void Start()
     {
         groundPlane = new Plane(Vector3.up, Vector3.zero);
-        
+
         rotationSpeed = GameManager.instance.playerSettings.mantleRotationSpeed;
 
         // Calculate scale factor based on actual screen resolution and low-res texture
