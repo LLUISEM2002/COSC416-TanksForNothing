@@ -1,24 +1,21 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class TankController : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     private Rigidbody rb;
-    private float moveSpeed; 
-    private float rotationSpeed;
-    private float rotationSnap;
-    private float rotationDeltaTime;
-
+    public int moveSpeed = 5;
+    public float rotationSpeed = 100f;
+    public int rotationSnap = 15;
     public Transform mantle;
+
+    private float rotationDeltaTime = 0f;
 
     void Start()
     {
-        moveSpeed = GameManager.instance.playerSettings.tankMoveSpeed;
-        rotationSpeed = GameManager.instance.playerSettings.tankRotationSpeed;
-        rotationSnap = GameManager.instance.playerSettings.rotationSnap;
         rb = GetComponent<Rigidbody>();
-        rotationDeltaTime = 0;
 
-        // Ensure the mantle reference is set
         if (mantle == null)
         {
             Debug.LogError("Mantle transform not assigned!");
@@ -30,10 +27,18 @@ public class TankController : MonoBehaviour
         float moveInput = InputManager.instance.GetMoveInput();
         float turnInput = InputManager.instance.GetTurnInput();
 
-        // Move tank forward/backward in the direction of wheels
+        handleMove(moveInput);
+        handleTurn(turnInput);
+        
+    }
+    void handleMove(float moveInput)
+    {
         Vector3 moveDirection = transform.forward * moveInput * moveSpeed;
         rb.linearVelocity = new Vector3(moveDirection.x, rb.linearVelocity.y, moveDirection.z);
-
+    }
+    void handleTurn(float turnInput)
+    {
+        // Move tank forward/backward in the direction of wheels
         if (turnInput != 0)
         {
             float rotationAngle = turnInput * rotationSpeed * rotationDeltaTime;
@@ -55,8 +60,12 @@ public class TankController : MonoBehaviour
             mantle.Rotate(Vector3.up * -rotationAngle);
 
         }
+
+        // Snap the tank based on rotationSnap
         Quaternion currentRotation = transform.rotation;
         float targetYRotation = Mathf.Round(currentRotation.eulerAngles.y / rotationSnap) * rotationSnap;
+
+        
         transform.rotation = Quaternion.Euler(0, targetYRotation, 0);
     }
 }

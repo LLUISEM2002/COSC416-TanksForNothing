@@ -4,16 +4,15 @@ public class MantleController : MonoBehaviour
 {
     public Camera mainCamera; // Assign your isometric camera in the inspector
     public RenderTexture lowResTexture; // Assign the lower-resolution texture from the camera
+    float rotationSpeed = 5f;
 
     private Plane groundPlane;
-    private float rotationSpeed;
     private Vector2 textureScaleFactor; // Scale factor for adjusting input coordinates
 
     void Start()
     {
         groundPlane = new Plane(Vector3.up, Vector3.zero);
 
-        rotationSpeed = GameManager.instance.playerSettings.mantleRotationSpeed;
 
         // Calculate scale factor based on actual screen resolution and low-res texture
         if (lowResTexture != null)
