@@ -2,15 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class Tank : MonoBehaviour
 {
-    private Rigidbody rb;
+    protected Rigidbody rb;
     public int moveSpeed = 5;
     public float rotationSpeed = 100f;
     public int rotationSnap = 15;
     public Transform mantle;
 
-    private float rotationDeltaTime = 0f;
+    protected float rotationDeltaTime = 0f;
 
     void Start()
     {
@@ -21,22 +21,12 @@ public class PlayerController : MonoBehaviour
             Debug.LogError("Mantle transform not assigned!");
         }
     }
-
-    void Update()
-    {
-        float moveInput = InputManager.instance.GetMoveInput();
-        float turnInput = InputManager.instance.GetTurnInput();
-
-        handleMove(moveInput);
-        handleTurn(turnInput);
-        
-    }
-    void handleMove(float moveInput)
+    protected void handleMove(float moveInput)
     {
         Vector3 moveDirection = transform.forward * moveInput * moveSpeed;
         rb.linearVelocity = new Vector3(moveDirection.x, rb.linearVelocity.y, moveDirection.z);
     }
-    void handleTurn(float turnInput)
+    protected void handleTurn(float turnInput)
     {
         // Move tank forward/backward in the direction of wheels
         if (turnInput != 0)
@@ -64,7 +54,6 @@ public class PlayerController : MonoBehaviour
         // Snap the tank based on rotationSnap
         Quaternion currentRotation = transform.rotation;
         float targetYRotation = Mathf.Round(currentRotation.eulerAngles.y / rotationSnap) * rotationSnap;
-
         
         transform.rotation = Quaternion.Euler(0, targetYRotation, 0);
     }
