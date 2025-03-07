@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 8306484720928713907}
   - component: {fileID: 744828645001643869}
   - component: {fileID: 4635841377685354932}
-  - component: {fileID: 5861327679773094165}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -27,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 356807741454969736}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
@@ -76,21 +75,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  rotationSpeed: 100
-  rotationSnap: 15
+  baseRotationSnap: 15
+  baseRotationSpeed: 100
+  mantleRotationSpeed: 5
   mantle: {fileID: 799569268692223799}
---- !u!114 &5861327679773094165
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 356807741454969736}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3952bf3a2d0782140bd29518441da1fd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  lowResTexture: {fileID: 8400000, guid: 0d448f12dcd63cb449e1873e3927b174, type: 2}
 --- !u!1 &1119852299543151610
 GameObject:
   m_ObjectHideFlags: 0
@@ -208,7 +197,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 799569268692223799}
-  - component: {fileID: 7229769022158779240}
   m_Layer: 0
   m_Name: Mantle
   m_TagString: Untagged
@@ -233,20 +221,6 @@ Transform:
   - {fileID: 1048722993857430890}
   m_Father: {fileID: 8306484720928713907}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7229769022158779240
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1356115834550104766}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1e7b761aac99234da727ae53537d9ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mainCamera: {fileID: 0}
-  lowResTexture: {fileID: 8400000, guid: 0d448f12dcd63cb449e1873e3927b174, type: 2}
 --- !u!1 &2645726300290160199
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,16 +1,18 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class MantleController : MonoBehaviour
+public class PlayerTank : Tank
 {
-    public Camera mainCamera; // Assign your isometric camera in the inspector
-    public RenderTexture lowResTexture; // Assign the lower-resolution texture from the camera
-    float rotationSpeed = 5f;
-
+    private Camera mainCamera; // Assign your isometric camera in the inspector
+    [SerializeField] private RenderTexture lowResTexture; // Assign the lower-resolution texture from the camera
     private Plane groundPlane;
     private Vector2 textureScaleFactor; // Scale factor for adjusting input coordinates
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
+        mainCamera = Camera.main;
         groundPlane = new Plane(Vector3.up, Vector3.zero);
 
 
@@ -27,13 +29,22 @@ public class MantleController : MonoBehaviour
             Debug.LogWarning("Low-resolution texture not assigned! Using default scale.");
             textureScaleFactor = Vector2.one; // Default to no scaling if no texture is provided
         }
-    }
 
+    }
     void Update()
     {
+        float moveInput = InputManager.instance.GetMoveInput();
+        float rotateInput = InputManager.instance.GetTurnInput();
+        HandleInput(moveInput, rotateInput);
         RotateMantleTowardsCursor();
     }
 
+    void HandleInput(float moveInput, float rotateInput)
+    {
+        HandleMove(moveInput);
+        HandleRotateBase(rotateInput);
+        RotateMantleTowardsCursor();
+    }
     void RotateMantleTowardsCursor()
     {
         if (mainCamera == null)
@@ -55,16 +66,7 @@ public class MantleController : MonoBehaviour
             Vector3 direction = intersectionPoint - transform.position;
             direction.y = 0; // Keep rotation on the horizontal plane
 
-            if (direction.magnitude > 0.01f)
-            {
-                Quaternion targetRotation = Quaternion.LookRotation(direction);
-                // Smoothly interpolate towards target rotation
-                transform.rotation = Quaternion.Slerp(
-                    transform.rotation,
-                    targetRotation,
-                    rotationSpeed * Time.deltaTime
-                );
-            }
+            HandleRotateMantle(direction);
         }
     }
 }
