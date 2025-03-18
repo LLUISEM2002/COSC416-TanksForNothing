@@ -10,7 +10,7 @@ public class JamokeController : Tank
 
     protected override void Start()
     {
-        base.Start(); // Initialize rigidbody and mantle from Tank class
+        base.Start(); // Call the Tank class's Start() to assign mantle and rigidbody
 
         // Find and assign the player tank
         GameObject playerObject = GameObject.FindWithTag("Player");
@@ -34,14 +34,10 @@ public class JamokeController : Tank
 
     void RotateMantleTowardsOffsetPosition()
     {
-        // Fixed offset in front of the player's forward direction
         Vector3 targetPosition = player.position + (player.forward * offsetDistance);
-
-        // Calculate the direction to the target position
         Vector3 direction = targetPosition - transform.position;
-        direction.y = 0; // Keep rotation on the horizontal plane
+        direction.y = 0;
 
-        // Use the Tank class's method to rotate the mantle
         HandleRotateMantle(direction);
     }
 }
