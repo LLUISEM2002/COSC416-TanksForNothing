@@ -5,10 +5,10 @@ using UnityEngine;
 public class JamokeController : MonoBehaviour
 {
     private Transform player; // Reference to the player tank
+    private Rigidbody playerRb; // Reference to the player's Rigidbody for velocity tracking
     private Transform mantle; // Reference to the mantle (auto-assigned)
 
-    [SerializeField] private float offsetDistance = 2.0f; // Fixed offset in front of the player's forward direction
-    [SerializeField] private float mantleRotationSpeed = 5.0f; // Speed of mantle rotation
+    [SerializeField] private float predictionMultiplier = 1.5f; // Adjust how far ahead the enemy aims
 
     void Start()
     {
@@ -17,6 +17,11 @@ public class JamokeController : MonoBehaviour
         if (playerObject != null)
         {
             player = playerObject.transform;
+            playerRb = playerObject.GetComponent<Rigidbody>(); // Get the player's Rigidbody
+            if (playerRb == null)
+            {
+                Debug.LogWarning("Player Rigidbody not found! Predictive aiming will be less accurate.");
+            }
         }
         else
         {
@@ -39,41 +44,26 @@ public class JamokeController : MonoBehaviour
     {
         if (player != null && mantle != null)
         {
-            RotateMantleTowardsOffsetPosition();
+            AimAtPredictedPlayerPosition();
         }
     }
 
-    void RotateMantleTowardsOffsetPosition()
+    void AimAtPredictedPlayerPosition()
     {
-        // Fixed offset in front of the player's forward direction
-        Vector3 targetPosition = player.position + (player.forward * offsetDistance);
+        // Get the player's velocity and predict future position
+        Vector3 predictedPosition = player.position;
 
-        // Velocity based Offset
-        /*
         if (playerRb != null)
         {
-            targetPosition += playerRb.velocity * predictionMultiplier; // Offset based on velocity
+            predictedPosition += playerRb.linearVelocity * predictionMultiplier; // Offset based on velocity
         }
-        */
 
-        // Calculate the direction to the target position
-        Vector3 direction = targetPosition - transform.position;
-        direction.y = 0; // Keep rotation on the horizontal plane
+        // Calculate the direction to the predicted position
+        Vector3 direction = predictedPosition - transform.position;
+        direction.y = 0; // Keep the rotation on the horizontal plane
 
-        HandleRotateMantle(direction);
-    }
-
-    protected void HandleRotateMantle(Vector3 direction)  
-    {
-        if (direction.magnitude > 0.01f)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
-            // Smoothly interpolate towards target rotation
-            mantle.rotation = Quaternion.Slerp(
-                mantle.rotation,
-                targetRotation,
-                mantleRotationSpeed * Time.deltaTime
-            );
-        }
+        // Rotate the mantle toward the predicted position
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        mantle.rotation = Quaternion.Slerp(mantle.rotation, targetRotation, Time.deltaTime * 5f); // Adjust speed as needed
     }
 }
