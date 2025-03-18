@@ -7,6 +7,9 @@ public class JamokeController : MonoBehaviour
     private Transform player; // Reference to the player tank
     private Transform mantle; // Reference to the mantle (auto-assigned)
 
+    [SerializeField] private float offsetDistance = 2.0f; // Fixed offset in front of the player's forward direction
+    [SerializeField] private float mantleRotationSpeed = 5.0f; // Speed of mantle rotation
+
     void Start()
     {
         // Find and assign the player tank
@@ -36,19 +39,41 @@ public class JamokeController : MonoBehaviour
     {
         if (player != null && mantle != null)
         {
-            AimAtPlayer();
+            RotateMantleTowardsOffsetPosition();
         }
     }
 
-    void AimAtPlayer()
+    void RotateMantleTowardsOffsetPosition()
     {
-        // Calculate the direction to the player
-        Vector3 direction = player.position - transform.position;
-        direction.y = 0; // Keep the rotation on the horizontal plane
+        // Fixed offset in front of the player's forward direction
+        Vector3 targetPosition = player.position + (player.forward * offsetDistance);
 
-        // Rotate the mantle toward the player
-        Quaternion targetRotation = Quaternion.LookRotation(direction);
-        mantle.rotation = Quaternion.Slerp(mantle.rotation, targetRotation, Time.deltaTime * 5f); // Adjust speed as needed
+        // Velocity based Offset
+        /*
+        if (playerRb != null)
+        {
+            targetPosition += playerRb.velocity * predictionMultiplier; // Offset based on velocity
+        }
+        */
+
+        // Calculate the direction to the target position
+        Vector3 direction = targetPosition - transform.position;
+        direction.y = 0; // Keep rotation on the horizontal plane
+
+        HandleRotateMantle(direction);
+    }
+
+    protected void HandleRotateMantle(Vector3 direction)  
+    {
+        if (direction.magnitude > 0.01f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            // Smoothly interpolate towards target rotation
+            mantle.rotation = Quaternion.Slerp(
+                mantle.rotation,
+                targetRotation,
+                mantleRotationSpeed * Time.deltaTime
+            );
+        }
     }
 }
-
