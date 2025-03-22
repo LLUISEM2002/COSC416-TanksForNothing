@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerTank : Tank
+public class PlayerController : Tank
 {
     private Camera mainCamera; // Assign your isometric camera in the inspector
     [SerializeField] private RenderTexture lowResTexture; // Assign the lower-resolution texture from the camera
@@ -33,16 +33,18 @@ public class PlayerTank : Tank
     }
     void Update()
     {
-        float moveInput = InputManager.instance.GetMoveInput();
-        float rotateInput = InputManager.instance.GetTurnInput();
-        HandleInput(moveInput, rotateInput);
+        float MoveInput = InputManager.instance.GetMoveInput();
+        float RotateInput = InputManager.instance.GetTurnInput();
+        bool IsShooting = InputManager.instance.IsShooting;
+        HandleInput(MoveInput, RotateInput, IsShooting);
         RotateMantleTowardsCursor();
     }
 
-    void HandleInput(float moveInput, float rotateInput)
+    void HandleInput(float moveInput, float rotateInput, bool IsShooting)
     {
         HandleMove(moveInput);
         HandleRotateBase(rotateInput);
+        HandleShootBullet(IsShooting);
         RotateMantleTowardsCursor();
     }
     void RotateMantleTowardsCursor()

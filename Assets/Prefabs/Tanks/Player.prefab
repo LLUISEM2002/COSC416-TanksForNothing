@@ -78,7 +78,9 @@ MonoBehaviour:
   baseRotationSnap: 15
   baseRotationSpeed: 100
   mantleRotationSpeed: 5
-  mantle: {fileID: 799569268692223799}
+  shootCooldown: 5
+  ShootForce: 1
+  bulletPrefab: {fileID: 7387806552522555609, guid: 4c21d61aab8ccbb4096e950332659ea2, type: 3}
   lowResTexture: {fileID: 8400000, guid: 0d448f12dcd63cb449e1873e3927b174, type: 2}
 --- !u!1 &1119852299543151610
 GameObject:

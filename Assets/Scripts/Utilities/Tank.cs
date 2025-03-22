@@ -9,10 +9,14 @@ public class Tank : MonoBehaviour
     public int baseRotationSnap = 15;
     public float baseRotationSpeed = 100f;
     public float mantleRotationSpeed = 5f;
+    public float shootCooldown = 5f;
+    public float ShootForce = 1f;
     protected Transform mantle; // Now private to prevent accidental assignment
-
     protected float rotationDeltaTime = 0f;
     protected Vector3 targetDirection = Vector3.forward;
+    protected float shootDeltaTime = 0f;
+    [SerializeField] private GameObject bulletPrefab;
+
 
     protected virtual void Start()
     {
@@ -78,5 +82,14 @@ public class Tank : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(direction);
             mantle.rotation = Quaternion.Slerp(mantle.rotation, targetRotation, mantleRotationSpeed * Time.deltaTime);
         }
+    }
+    protected void HandleShootBullet(bool IsShooting)
+    {
+        if (IsShooting && shootDeltaTime > shootCooldown)
+        {
+            Bullet.FireBullet(bulletPrefab, transform.position, transform.forward, ShootForce);
+            shootDeltaTime = 0;
+        }
+        shootDeltaTime += Time.deltaTime;
     }
 }

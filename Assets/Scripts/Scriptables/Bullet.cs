@@ -1,0 +1,41 @@
+using UnityEngine;
+
+public class Bullet : MonoBehaviour
+{
+
+    public void Start()
+    {
+        // if (AudioManager.instance != null)
+        // {
+        //     AudioManager.instance.PlaySound(AudioManager.instance.shootClip);
+        // }
+    }
+    public void OnCollisionEnter(Collision collision)
+    {
+        // if (AudioManager.instance != null)
+        // {
+        //     AudioManager.instance.PlaySound(AudioManager.instance.explosionClip);
+        // }
+    
+        // Instantiate(explosionParticle, transform.position, transform.rotation);
+    
+        Destroy(gameObject);
+
+        if (collision.gameObject.CompareTag("Tank"))
+        {
+            Destroy(collision.gameObject);
+        }
+    }
+
+    // handling bullet shooting
+
+    public static void FireBullet(GameObject bulletPrefab, Vector3 spawnPosition, Vector3 shootDirection, float speed)
+    {
+        GameObject bullet = Instantiate(bulletPrefab, spawnPosition, Quaternion.identity);
+        Rigidbody bulletRigidbody = bullet.GetComponent<Rigidbody>();
+
+        bulletRigidbody.AddForce(shootDirection.normalized * speed, ForceMode.Impulse);
+
+        Destroy(bullet, 4f);
+    }
+}

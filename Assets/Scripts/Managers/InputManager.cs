@@ -4,6 +4,8 @@ public class InputManager : MonoBehaviour
 {
     public static InputManager instance; // Singleton pattern for global access
 
+    public bool IsShooting {get; private set; }
+
     private void Awake()
     {
         if (instance == null)
@@ -20,5 +22,10 @@ public class InputManager : MonoBehaviour
     public float GetTurnInput()
     {
         return Input.GetAxis("Horizontal"); // A/D or Left/Right
+    }
+    void Update()
+    {
+        IsShooting = Input.GetMouseButtonDown(0); // left mouse button
+        Debug.Log(IsShooting);
     }
 }

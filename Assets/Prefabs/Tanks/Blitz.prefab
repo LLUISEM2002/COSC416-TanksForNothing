@@ -98,7 +98,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c01458105f2ec924ea39c8a935ca33f4, type: 2}
+  - {fileID: 2100000, guid: a006e572a682a2f42a252b7d5b13ea5f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -206,7 +206,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c01458105f2ec924ea39c8a935ca33f4, type: 2}
+  - {fileID: 2100000, guid: a006e572a682a2f42a252b7d5b13ea5f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -262,7 +262,7 @@ GameObject:
   - component: {fileID: 7028561619441599113}
   - component: {fileID: 3709022248606391184}
   m_Layer: 0
-  m_Name: Blitz (short for Blitzkrieg)
+  m_Name: Blitz
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -328,6 +328,9 @@ MonoBehaviour:
   baseRotationSnap: 15
   baseRotationSpeed: 100
   mantleRotationSpeed: 5
+  shootCooldown: 5
+  ShootForce: 1
+  bulletPrefab: {fileID: 7387806552522555609, guid: 4c21d61aab8ccbb4096e950332659ea2, type: 3}
   offsetDistance: 2
   repathRate: 2
 --- !u!114 &3709022248606391184
@@ -342,7 +345,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 100b2ebd84df6da43a172b81b121dfe1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pathfinder: {fileID: 0}
   speed: 3
 --- !u!1 &6135158144936186915
 GameObject:
@@ -409,7 +411,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c01458105f2ec924ea39c8a935ca33f4, type: 2}
+  - {fileID: 2100000, guid: a006e572a682a2f42a252b7d5b13ea5f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -550,7 +552,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c01458105f2ec924ea39c8a935ca33f4, type: 2}
+  - {fileID: 2100000, guid: a006e572a682a2f42a252b7d5b13ea5f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
