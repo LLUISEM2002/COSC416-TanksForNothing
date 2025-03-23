@@ -10,7 +10,7 @@ public class Tank : MonoBehaviour
     public float baseRotationSpeed = 100f;
     public float mantleRotationSpeed = 5f;
     public float shootCooldown = 5f;
-    public float ShootForce = 1f;
+    public float ShootForce = 10f;
     protected Transform mantle; // Now private to prevent accidental assignment
     protected float rotationDeltaTime = 0f;
     protected Vector3 targetDirection = Vector3.forward;
@@ -87,8 +87,11 @@ public class Tank : MonoBehaviour
     {
         if (IsShooting && shootDeltaTime > shootCooldown)
         {
-            Bullet.FireBullet(bulletPrefab, transform.position, transform.forward, ShootForce);
+            Vector3 SpawnOffset = mantle.forward * 1.5f; // Adjust 1.5f to push it farther or closer
+            Vector3 SpawnPosition = transform.position + SpawnOffset;
+            Bullet.FireBullet(bulletPrefab, SpawnPosition, mantle.forward, ShootForce);
             shootDeltaTime = 0;
+            Debug.Log("Shot Fired");
         }
         shootDeltaTime += Time.deltaTime;
     }

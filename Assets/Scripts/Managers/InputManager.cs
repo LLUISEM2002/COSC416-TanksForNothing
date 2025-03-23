@@ -25,7 +25,6 @@ public class InputManager : MonoBehaviour
     }
     void Update()
     {
-        IsShooting = Input.GetMouseButtonDown(0); // left mouse button
-        Debug.Log(IsShooting);
+        IsShooting = Input.GetMouseButton(0); // left mouse button
     }
 }

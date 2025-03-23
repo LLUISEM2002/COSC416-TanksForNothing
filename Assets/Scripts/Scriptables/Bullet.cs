@@ -19,10 +19,11 @@ public class Bullet : MonoBehaviour
     
         // Instantiate(explosionParticle, transform.position, transform.rotation);
     
-        Destroy(gameObject);
+        
 
         if (collision.gameObject.CompareTag("Tank"))
         {
+            Destroy(gameObject);
             Destroy(collision.gameObject);
         }
     }
