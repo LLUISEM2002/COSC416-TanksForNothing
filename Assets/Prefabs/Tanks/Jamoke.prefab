@@ -370,7 +370,7 @@ GameObject:
   - component: {fileID: 5982202836407624347}
   m_Layer: 0
   m_Name: Jamoke
-  m_TagString: Untagged
+  m_TagString: Tank
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -436,7 +436,7 @@ MonoBehaviour:
   baseRotationSpeed: 100
   mantleRotationSpeed: 5
   shootCooldown: 5
-  ShootForce: 1
+  shootForce: 1
   bulletPrefab: {fileID: 7387806552522555609, guid: 4c21d61aab8ccbb4096e950332659ea2, type: 3}
   offsetDistance: 4
 --- !u!1 &7430522259193726206

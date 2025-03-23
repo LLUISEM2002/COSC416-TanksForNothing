@@ -13,7 +13,7 @@ public class PlayerController : Tank
     {
         base.Start();
         mainCamera = Camera.main;
-        groundPlane = new Plane(Vector3.up, Vector3.zero);
+        groundPlane = new Plane(Vector3.up, new Vector3(0,0.5f,0));
 
 
         // Calculate scale factor based on actual screen resolution and low-res texture
@@ -30,6 +30,7 @@ public class PlayerController : Tank
             textureScaleFactor = Vector2.one; // Default to no scaling if no texture is provided
         }
 
+        shootForce = 5;
     }
     void Update()
     {

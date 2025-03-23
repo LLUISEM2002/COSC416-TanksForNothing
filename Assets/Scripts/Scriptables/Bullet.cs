@@ -18,8 +18,7 @@ public class Bullet : MonoBehaviour
         // }
     
         // Instantiate(explosionParticle, transform.position, transform.rotation);
-    
-        
+        Debug.Log(collision.gameObject);
 
         if (collision.gameObject.CompareTag("Tank"))
         {
@@ -35,8 +34,8 @@ public class Bullet : MonoBehaviour
         GameObject bullet = Instantiate(bulletPrefab, spawnPosition, Quaternion.identity);
         Rigidbody bulletRigidbody = bullet.GetComponent<Rigidbody>();
 
-        bulletRigidbody.AddForce(shootDirection.normalized * speed, ForceMode.Impulse);
+        bulletRigidbody.linearVelocity = shootDirection.normalized * speed;
 
-        Destroy(bullet, 4f);
+        Destroy(bullet, 10f);
     }
 }

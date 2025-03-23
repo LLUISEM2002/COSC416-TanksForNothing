@@ -7,14 +7,14 @@ public class Tank : MonoBehaviour
     protected Rigidbody rb;
     public int moveSpeed = 5;
     public int baseRotationSnap = 15;
-    public float baseRotationSpeed = 100f;
-    public float mantleRotationSpeed = 5f;
-    public float shootCooldown = 5f;
-    public float ShootForce = 10f;
+    public float baseRotationSpeed = 100;
+    public float mantleRotationSpeed = 5;
+    public float shootCooldown = 1;
+    public float shootForce = 1;
     protected Transform mantle; // Now private to prevent accidental assignment
-    protected float rotationDeltaTime = 0f;
+    protected float rotationDeltaTime = 0;
     protected Vector3 targetDirection = Vector3.forward;
-    protected float shootDeltaTime = 0f;
+    protected float shootDeltaTime = 0;
     [SerializeField] private GameObject bulletPrefab;
 
 
@@ -37,6 +37,8 @@ public class Tank : MonoBehaviour
         {
             Debug.LogWarning($"Mantle not found on {gameObject.name}! Make sure it has a child object named 'Mantle'.");
         }
+
+        shootDeltaTime = shootCooldown;
     }
 
     protected void HandleMove(float moveInput)
@@ -89,7 +91,7 @@ public class Tank : MonoBehaviour
         {
             Vector3 SpawnOffset = mantle.forward * 1.5f; // Adjust 1.5f to push it farther or closer
             Vector3 SpawnPosition = transform.position + SpawnOffset;
-            Bullet.FireBullet(bulletPrefab, SpawnPosition, mantle.forward, ShootForce);
+            Bullet.FireBullet(bulletPrefab, SpawnPosition, mantle.forward, shootForce);
             shootDeltaTime = 0;
             Debug.Log("Shot Fired");
         }
