@@ -13,7 +13,7 @@ public class PlayerController : Tank
     {
         base.Start();
         mainCamera = Camera.main;
-        groundPlane = new Plane(Vector3.up, new Vector3(0,0.5f,0));
+        groundPlane = new Plane(Vector3.up, new Vector3(0,0.65f,0));
 
 
         // Calculate scale factor based on actual screen resolution and low-res texture

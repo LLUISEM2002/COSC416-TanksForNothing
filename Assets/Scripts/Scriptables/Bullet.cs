@@ -29,13 +29,13 @@ public class Bullet : MonoBehaviour
 
     // handling bullet shooting
 
-    public static void FireBullet(GameObject bulletPrefab, Vector3 spawnPosition, Vector3 shootDirection, float speed)
+    public static void FireBullet(GameObject bulletPrefab, Vector3 spawnPosition, Vector3 shootDirection, float speed, float lifetime)
     {
         GameObject bullet = Instantiate(bulletPrefab, spawnPosition, Quaternion.identity);
         Rigidbody bulletRigidbody = bullet.GetComponent<Rigidbody>();
 
         bulletRigidbody.linearVelocity = shootDirection.normalized * speed;
 
-        Destroy(bullet, 10f);
+        Destroy(bullet, lifetime);
     }
 }
