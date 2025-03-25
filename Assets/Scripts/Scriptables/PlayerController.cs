@@ -34,9 +34,9 @@ public class PlayerController : Tank
     }
     void Update()
     {
-        float MoveInput = InputManager.instance.GetMoveInput();
-        float RotateInput = InputManager.instance.GetTurnInput();
-        bool IsShooting = InputManager.instance.IsShooting;
+        float MoveInput = InputManager.Instance.GetMoveInput();
+        float RotateInput = InputManager.Instance.GetTurnInput();
+        bool IsShooting = InputManager.Instance.IsShooting;
         HandleInput(MoveInput, RotateInput, IsShooting);
         RotateMantleTowardsCursor();
     }
