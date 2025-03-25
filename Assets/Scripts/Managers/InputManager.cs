@@ -2,14 +2,14 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
-    public static InputManager instance; // Singleton pattern for global access
+    public static InputManager Instance; // Singleton pattern for global access
 
     public bool IsShooting {get; private set; }
 
     private void Awake()
     {
-        if (instance == null)
-            instance = this;
+        if (Instance == null)
+            Instance = this;
         else
             Destroy(gameObject);
     }
