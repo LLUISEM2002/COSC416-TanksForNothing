@@ -9,9 +9,9 @@ public class PlayerController : Tank
     private Plane groundPlane;
     private Vector2 textureScaleFactor; // Scale factor for adjusting input coordinates
 
-    protected override void Start()
+    protected override void Awake()
     {
-        base.Start();
+        base.Awake();
         mainCamera = Camera.main;
         groundPlane = new Plane(Vector3.up, new Vector3(0,0.65f,0));
 
