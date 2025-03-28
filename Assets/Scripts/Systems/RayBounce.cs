@@ -3,9 +3,9 @@ using UnityEngine;
 public class RayBounce : MonoBehaviour
 {
     [SerializeField] private int rayCount = 2;
-    [SerializeField] private float maxDistance = 10f;
+    [SerializeField] private float maxDistance = 40f;
     [SerializeField] private LayerMask collisionMask = ~0; // Everything by default
-
+        
     private void Update()
     {
         CastRay(transform.position, transform.forward);

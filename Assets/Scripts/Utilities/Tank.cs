@@ -12,7 +12,7 @@ public class Tank : MonoBehaviour
     public float shootCooldown = 1;
     public float shootForce = 1;
     public float bulletLifetime = 10f;
-    protected Transform mantle; // Now private to prevent accidental assignment
+    public Transform Mantle { get; protected set; }
     protected float rotationDeltaTime = 0;
     protected Vector3 targetDirection = Vector3.forward;
     protected float shootDeltaTime = 0;
