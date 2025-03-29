@@ -22,8 +22,14 @@ public class Bullet : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Tank"))
         {
+            
+            JamokeController jamoke = collision.gameObject.GetComponent<JamokeController>();
+            if (jamoke != null){
+                jamoke.OnJamokeDestroyed();
+            }
+            
             Destroy(gameObject);
-            Destroy(collision.gameObject);
+            //Destroy(collision.gameObject);
         }
     }
 
