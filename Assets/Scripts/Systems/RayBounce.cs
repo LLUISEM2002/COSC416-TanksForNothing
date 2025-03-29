@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class RayBounce : MonoBehaviour
 {
-    [SerializeField] private float maxDistance = 15f;
+    [SerializeField] private float maxDistance = 30f;
     [SerializeField] private int rayCount = 2;
     private LayerMask collisionMask = 0;
     private Transform Mantle;
@@ -44,25 +44,33 @@ public class RayBounce : MonoBehaviour
 
         collisionMask = LayerMask.GetMask("Wall");
 
-        if (collisionMask == null)
+        if (collisionMask == 0)
         {
             Debug.LogWarning("Wall mask not found.");
         }
     }
     private void Update()
     {
-        if (Mantle != null && Close != null && Middle != null && Far != null)
+        if (InputManager.Instance.ShowRay)
         {
-            CastRay(Mantle.position, Mantle.forward);
+            if (Mantle != null && Close != null && Middle != null && Far != null)
+            {
+                Vector3 start = Mantle.position;
+                start.z = 1;
+                CastRay(start, Mantle.forward);
+            }
+        }
+        else
+        {
+            Vector3 offscreen = new Vector3(100, 0, 100);
+            Close.SetPositionAndRotation(offscreen, Quaternion.identity);
+            Middle.SetPositionAndRotation(offscreen, Quaternion.identity);
+            Far.SetPositionAndRotation(offscreen, Quaternion.identity);
         }
     }
 
     private void CastRay(Vector3 position, Vector3 direction)
     {
-        Vector3 offscreen = new Vector3(100, 0, 100);
-        Close.SetPositionAndRotation(offscreen, Quaternion.identity);
-        Middle.SetPositionAndRotation(offscreen, Quaternion.identity);
-        Far.SetPositionAndRotation(offscreen, Quaternion.identity);
 
 
         List<Vector3> points = new() { position };
@@ -70,7 +78,7 @@ public class RayBounce : MonoBehaviour
         for (int i = 0; i < rayCount; i++)
         {
             Ray ray = new Ray(position, direction);
-            if (Physics.Raycast(ray, out RaycastHit hit, maxDistance, collisionMask))
+            if (Physics.Raycast(ray, out RaycastHit hit, (rayCount-i)*maxDistance, collisionMask))
             {
                 points.Add(hit.point);
                 direction = Vector3.Reflect(direction, hit.normal);
@@ -110,9 +118,14 @@ public class RayBounce : MonoBehaviour
             return points[^1]; // Fallback
         }
 
-        // Set object positions
-        Close.position = GetPointAlongPath(totalDistance * 0.05f);
-        Middle.position = GetPointAlongPath(totalDistance * 0.5f);
-        Far.position = GetPointAlongPath(totalDistance * 0.95f);
+        // Set object positions 
+        Vector3 closePos = GetPointAlongPath(totalDistance * 0.15f);
+        Close.position = closePos;
+
+        Vector3 middlePos = GetPointAlongPath(totalDistance * 0.5f);
+        Middle.position = middlePos;
+
+        Vector3 farPos = GetPointAlongPath(totalDistance * 0.95f);
+        Far.position = farPos;
     }
 }
