@@ -12,9 +12,9 @@ public class BlitzController : Tank
     [SerializeField] private float repathRate = 2.0f; // How often to recalculate path
     private float nextPathTime = 0f; // Timer for repathing
 
-    protected override void Start()
+    protected override void Awake()
     {
-        base.Start(); // Initialize rigidbody and mantle from Tank class
+        base.Awake(); // Initialize rigidbody and mantle from Tank class
 
         // Find the player
         GameObject playerObject = GameObject.FindWithTag("Player");

@@ -5,6 +5,7 @@ public class InputManager : MonoBehaviour
     public static InputManager Instance; // Singleton pattern for global access
 
     public bool IsShooting {get; private set; }
+    public bool ShowRay {get; private set; }
 
     private void Awake()
     {
@@ -26,5 +27,9 @@ public class InputManager : MonoBehaviour
     void Update()
     {
         IsShooting = Input.GetMouseButton(0); // left mouse button
+        if (Input.GetKeyDown("e"))
+        {
+            ShowRay = !ShowRay;
+        }
     }
 }

@@ -12,14 +12,14 @@ public class Tank : MonoBehaviour
     public float shootCooldown = 1;
     public float shootForce = 1;
     public float bulletLifetime = 10f;
-    protected Transform mantle; // Now private to prevent accidental assignment
+    public Transform Mantle { get; protected set; }
     protected float rotationDeltaTime = 0;
     protected Vector3 targetDirection = Vector3.forward;
     protected float shootDeltaTime = 0;
     [SerializeField] private GameObject bulletPrefab;
 
 
-    protected virtual void Start()
+    protected virtual void Awake()
     {
         rb = GetComponent<Rigidbody>();
 
@@ -28,13 +28,8 @@ public class Tank : MonoBehaviour
             Debug.LogError("Rigidbody is null in Tank!");
         }
 
-        // Automatically find and assign the mantle (child of this object)
-        Transform mantleTransform = transform.Find("Mantle");
-        if (mantleTransform != null)
-        {
-            mantle = mantleTransform;
-        }
-        else
+        Mantle = transform.Find("Mantle");
+        if (Mantle == null)
         {
             Debug.LogWarning($"Mantle not found on {gameObject.name}! Make sure it has a child object named 'Mantle'.");
         }
@@ -66,9 +61,9 @@ public class Tank : MonoBehaviour
             }
 
             transform.Rotate(Vector3.up * rotationAngle);
-            if (mantle != null)
+            if (Mantle != null)
             {
-                mantle.Rotate(Vector3.up * -rotationAngle);
+                Mantle.Rotate(Vector3.up * -rotationAngle);
             }
         }
 
@@ -80,19 +75,19 @@ public class Tank : MonoBehaviour
 
     protected void HandleRotateMantle(Vector3 direction)
     {
-        if (direction.magnitude > 0.01f && mantle != null)
+        if (direction.magnitude > 0.01f && Mantle != null)
         {
             Quaternion targetRotation = Quaternion.LookRotation(direction);
-            mantle.rotation = Quaternion.Slerp(mantle.rotation, targetRotation, mantleRotationSpeed * Time.deltaTime);
+            Mantle.rotation = Quaternion.Slerp(Mantle.rotation, targetRotation, mantleRotationSpeed * Time.deltaTime);
         }
     }
     protected void HandleShootBullet(bool IsShooting)
     {
         if (IsShooting && shootDeltaTime > shootCooldown)
         {
-            Vector3 SpawnOffset = mantle.forward * 1.5f; // Adjust 1.5f to push it farther or closer
+            Vector3 SpawnOffset = Mantle.forward * 1.5f; // Adjust 1.5f to push it farther or closer
             Vector3 SpawnPosition = transform.position + SpawnOffset;
-            Bullet.FireBullet(bulletPrefab, SpawnPosition, mantle.forward, shootForce, bulletLifetime);
+            Bullet.FireBullet(bulletPrefab, SpawnPosition, Mantle.forward, shootForce, bulletLifetime);
             shootDeltaTime = 0;
         }
         shootDeltaTime += Time.deltaTime;
