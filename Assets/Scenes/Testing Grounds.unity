@@ -1448,7 +1448,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7028561619441599113, guid: e90cdb27ccdd5e6459dd46758c5b4b67, type: 3}
       propertyPath: bulletSpeed
-      value: 2
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7028561619441599113, guid: e90cdb27ccdd5e6459dd46758c5b4b67, type: 3}
+      propertyPath: shootCooldown
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 7028561619441599113, guid: e90cdb27ccdd5e6459dd46758c5b4b67, type: 3}
       propertyPath: bounceBulletPrefab

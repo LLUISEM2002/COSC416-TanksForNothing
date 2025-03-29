@@ -16,7 +16,7 @@ public class BlitzController : Tank
     [SerializeField] private LayerMask wallAndPlayerMask;
     [SerializeField] private int maxBounces = 3;
     [SerializeField] private float maxRayDistance = 100f;
-    [SerializeField] private float aimInterval = 1.0f;
+    [SerializeField] private float aimInterval = 2.5f;
     private float nextAimTime = 0f;
 
     [Header("Projectile Settings")]
@@ -34,24 +34,10 @@ public class BlitzController : Tank
         if (playerObject != null)
         {
             player = playerObject.transform;
-            Debug.Log("Blitz is targeting: " + player.name + " | Root: " + player.root.name + " | Tag: " + player.tag + " | Layer: " + LayerMask.LayerToName(player.gameObject.layer));
-        }
-        else
-        {
-            Debug.LogWarning("Player tank not found! Make sure it has the 'Player' tag.");
         }
 
         pathFollower = GetComponent<TankPathFollower>();
         pathfinding = FindFirstObjectByType<AStarPathfinding>();
-
-        if (pathFollower == null)
-        {
-            Debug.LogError("TankPathFollower component is missing on Blitz!");
-        }
-        if (pathfinding == null)
-        {
-            Debug.LogError("AStarPathfinding component is missing in the scene!");
-        }
     }
 
     void Update()
@@ -66,16 +52,14 @@ public class BlitzController : Tank
 
             if (Time.time >= nextAimTime)
             {
-                AimWithBounce();
+                AimWithBounceFan();
                 nextAimTime = Time.time + aimInterval;
             }
 
-            // Continuously rotate mantle to follow bounce direction
             if (currentBounceDirection != Vector3.zero)
             {
                 HandleRotateMantle(currentBounceDirection);
 
-                // Check if mantle is now aligned and we have a shot pending
                 if (pendingFire && IsMantleAimed(currentBounceDirection))
                 {
                     FireBouncingBullet(currentBounceDirection);
@@ -87,49 +71,41 @@ public class BlitzController : Tank
 
     void RequestPathToPlayer()
     {
-        if (pathfinding != null && pathFollower != null)
-        {
-            Debug.Log("Pathfinding temporarily disabled for aiming debug.");
-            // pathFollower.MoveToTarget(player.position);
-        }
+        // Optional path following
+        pathFollower.MoveToTarget(player.position);
     }
 
-    void AimWithBounce()
+    void AimWithBounceFan()
     {
-        Debug.Log("Attempting to aim and fire...");
-        Vector3 start = transform.position + Vector3.up * 0.5f;
-        Vector3 direction = (player.position - transform.position).normalized;
+        Vector3 origin = transform.position + Vector3.up * 0.5f;
+        Vector3 baseDirection = (player.position - transform.position).normalized;
 
-        var (hitPlayer, bouncePath) = GetReflectedPath(start, direction, maxBounces, maxRayDistance, wallAndPlayerMask);
+        float[] angles = { -90f, -60f, -30f, 0f, 30f, 60f, 90f };
 
-        for (int i = 0; i < bouncePath.Count - 1; i++)
+        foreach (float angle in angles)
         {
-            Debug.DrawLine(bouncePath[i], bouncePath[i + 1], Color.cyan, 1.1f);
-            Debug.DrawRay(bouncePath[i], Vector3.up * 0.5f, Color.yellow, 1.1f);
-        }
+            Vector3 rotatedDirection = Quaternion.Euler(0, angle, 0) * baseDirection;
 
-        if (bouncePath.Count >= 2)
-        {
-            currentBounceDirection = bouncePath[1] - bouncePath[0];
-            currentBounceDirection.y = 0;
+            var (hitPlayer, path) = GetReflectedPath(origin, rotatedDirection, maxBounces, maxRayDistance, wallAndPlayerMask);
 
-            if (hitPlayer)
+            for (int i = 0; i < path.Count - 1; i++)
             {
-                Debug.Log("Player detected! Will fire once mantle aligns...");
+                Color rayColor = hitPlayer ? Color.red : Color.cyan;
+                Debug.DrawLine(path[i], path[i + 1], rayColor, 1.1f);
+                Debug.DrawRay(path[i], Vector3.up * 0.5f, Color.yellow, 1.1f);
+            }
+
+            if (hitPlayer && path.Count >= 2)
+            {
+                currentBounceDirection = path[1] - path[0];
+                currentBounceDirection.y = 0;
                 pendingFire = true;
-            }
-            else
-            {
-                Debug.Log("Ray did NOT hit player.");
-                pendingFire = false;
+                return; 
             }
         }
-        else
-        {
-            Debug.Log("Insufficient bounce points to determine aim.");
-            currentBounceDirection = Vector3.zero;
-            pendingFire = false;
-        }
+
+        currentBounceDirection = Vector3.zero;
+        pendingFire = false;
     }
 
     bool IsMantleAimed(Vector3 targetDirection)
@@ -140,7 +116,7 @@ public class BlitzController : Tank
         Vector3 flatTarget = targetDirection.normalized;
 
         float angle = Vector3.Angle(flatForward, flatTarget);
-        return angle < 3f; // within 3 degrees is "close enough"
+        return angle < 3f;
     }
 
     (bool, List<Vector3>) GetReflectedPath(Vector3 startPos, Vector3 direction, int maxBounces, float maxDistance, LayerMask mask)
@@ -158,20 +134,15 @@ public class BlitzController : Tank
             {
                 points.Add(hit.point);
 
-                // Traverse up the hierarchy to find a parent with the "Player" tag
-                Transform playerTransform = hit.collider.transform;
-                while (playerTransform != null && !playerTransform.CompareTag("Player"))
+                // Climb the hierarchy to find the Player tag
+                Transform current = hit.collider.transform;
+                while (current != null)
                 {
-                    playerTransform = playerTransform.parent;
-                }
-
-                Debug.Log("Ray hit: " + hit.collider.name + " | Tag: " + hit.collider.tag +
-                          " | Matching parent (Player?): " + playerTransform?.name + " | Tag: " + playerTransform?.tag);
-
-                if (playerTransform != null)
-                {
-                    Debug.Log("Ray hit the player!");
-                    return (true, points); // Stop bouncing
+                    if (current.CompareTag("Player"))
+                    {
+                        return (true, points);
+                    }
+                    current = current.parent;
                 }
 
                 currentDirection = Vector3.Reflect(currentDirection, hit.normal);
@@ -187,6 +158,7 @@ public class BlitzController : Tank
         return (false, points);
     }
 
+
     void FireBouncingBullet(Vector3 shootDirection)
     {
         if (bounceBulletPrefab != null && mantle != null)
@@ -194,12 +166,7 @@ public class BlitzController : Tank
             Vector3 spawnOffset = shootDirection.normalized * 1.5f;
             Vector3 spawnPosition = transform.position + spawnOffset;
 
-            Debug.Log("Firing bullet from Blitz in bounce direction!");
             Bullet.FireBullet(bounceBulletPrefab, spawnPosition, shootDirection, bulletSpeed, bulletLifetime);
-        }
-        else
-        {
-            Debug.LogWarning("Missing bounceBulletPrefab or mantle.");
         }
     }
 }
