@@ -1,7 +1,10 @@
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
+
 {
+      private MapController mapController;
+
 
     public void Start()
     {
@@ -9,6 +12,7 @@ public class Bullet : MonoBehaviour
         // {
         //     AudioManager.instance.PlaySound(AudioManager.instance.shootClip);
         // }
+         mapController = FindObjectOfType<MapController>();
     }
     public void OnCollisionEnter(Collision collision)
     {
@@ -22,14 +26,12 @@ public class Bullet : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Tank"))
         {
-            
-            JamokeController jamoke = collision.gameObject.GetComponent<JamokeController>();
-            if (jamoke != null){
-                jamoke.OnJamokeDestroyed();
+            if (mapController != null)
+            {
+                mapController.OnJamokeDone();
             }
-            
+            Destroy(collision.gameObject);
             Destroy(gameObject);
-            //Destroy(collision.gameObject);
         }
     }
 

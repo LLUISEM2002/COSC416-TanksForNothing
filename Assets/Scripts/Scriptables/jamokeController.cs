@@ -5,7 +5,6 @@ using UnityEngine;
 public class JamokeController : Tank
 {
     private Transform player; // Reference to the player tank
-    private MapController mapController; // Reference to the MapController
 
     [SerializeField] private float offsetDistance = 2.0f; // Fixed offset in front of the player's forward direction
 
@@ -16,7 +15,6 @@ public class JamokeController : Tank
         // Find and assign the player tank
         GameObject playerObject = GameObject.FindWithTag("Player");
 
-        mapController = FindObjectOfType<MapController>(); // Find the MapController in the scene
         if (playerObject != null)
         {
             player = playerObject.transform;
@@ -42,15 +40,5 @@ public class JamokeController : Tank
         direction.y = 0;
 
         HandleRotateMantle(direction);
-    }
-
-    public void OnJamokeDestroyed()
-    {
-        // Inform the MapController, then destroy Jamoke
-        if (mapController != null)
-        {
-            mapController.OnJamokeDone();
-        }
-        Destroy(gameObject);
     }
 }
