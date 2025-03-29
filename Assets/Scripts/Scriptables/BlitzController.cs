@@ -16,12 +16,12 @@ public class BlitzController : Tank
     [SerializeField] private LayerMask wallAndPlayerMask;
     [SerializeField] private int maxBounces = 3;
     [SerializeField] private float maxRayDistance = 100f;
-    [SerializeField] private float aimInterval = 2.5f;
-    private float nextAimTime = 0f;
 
     [Header("Projectile Settings")]
     [SerializeField] private GameObject bounceBulletPrefab;
     [SerializeField] private float bulletSpeed = 20f;
+    [SerializeField] private float fireCooldown = 2f;
+    private float fireCooldownTimer = 0f;
 
     private Vector3 currentBounceDirection;
     private bool pendingFire = false;
@@ -44,18 +44,25 @@ public class BlitzController : Tank
     {
         if (player != null)
         {
+            // Rotate wheels based on path-following velocity
+            if (pathFollower != null && pathFollower.CurrentVelocity != Vector3.zero)
+            {
+                HandleRotateWheels(pathFollower.CurrentVelocity);
+            }
+
             if (Time.time >= nextPathTime)
             {
                 RequestPathToPlayer();
                 nextPathTime = Time.time + repathRate;
             }
 
-            if (Time.time >= nextAimTime)
+            // Only raycast if ready to shoot
+            if (fireCooldownTimer <= 0f)
             {
                 AimWithBounceFan();
-                nextAimTime = Time.time + aimInterval;
             }
 
+            // Rotate mantle and fire if aligned
             if (currentBounceDirection != Vector3.zero)
             {
                 HandleRotateMantle(currentBounceDirection);
@@ -64,15 +71,20 @@ public class BlitzController : Tank
                 {
                     FireBouncingBullet(currentBounceDirection);
                     pendingFire = false;
+                    fireCooldownTimer = fireCooldown;
                 }
             }
+
+            fireCooldownTimer -= Time.deltaTime;
         }
     }
 
     void RequestPathToPlayer()
     {
-        // Optional path following
-        pathFollower.MoveToTarget(player.position);
+        if (pathFollower != null && pathfinding != null)
+        {
+            pathFollower.MoveToTarget(player.position);
+        }
     }
 
     void AimWithBounceFan()
@@ -100,7 +112,7 @@ public class BlitzController : Tank
                 currentBounceDirection = path[1] - path[0];
                 currentBounceDirection.y = 0;
                 pendingFire = true;
-                return; 
+                return;
             }
         }
 
@@ -134,7 +146,6 @@ public class BlitzController : Tank
             {
                 points.Add(hit.point);
 
-                // Climb the hierarchy to find the Player tag
                 Transform current = hit.collider.transform;
                 while (current != null)
                 {
@@ -157,7 +168,6 @@ public class BlitzController : Tank
 
         return (false, points);
     }
-
 
     void FireBouncingBullet(Vector3 shootDirection)
     {
