@@ -8,9 +8,9 @@ public class JamokeController : Tank
 
     [SerializeField] private float offsetDistance = 2.0f; // Fixed offset in front of the player's forward direction
 
-    protected override void Start()
+    protected override void Awake()
     {
-        base.Start(); // Call the Tank class's Start() to assign mantle and rigidbody
+        base.Awake(); // Call the Tank class's Start() to assign mantle and rigidbody
 
         // Find and assign the player tank
         GameObject playerObject = GameObject.FindWithTag("Player");

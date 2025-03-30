@@ -13,15 +13,17 @@ public class Tank : MonoBehaviour
     public float shootForce = 1;
     public float bulletLifetime = 10f;
 
-    protected Transform mantle; // Handles turret/cannon rotation
-    protected Transform wheels; // Optional: Handles visual movement direction
+    protected Transform mantle; // private use
+    public Transform Mantle { get; protected set; } // public access
+    protected Transform wheels;
+
     protected float rotationDeltaTime = 0;
     protected Vector3 targetDirection = Vector3.forward;
     protected float shootDeltaTime = 0;
 
     [SerializeField] private GameObject bulletPrefab;
 
-    protected virtual void Start()
+    protected virtual void Awake()
     {
         rb = GetComponent<Rigidbody>();
 
@@ -30,18 +32,17 @@ public class Tank : MonoBehaviour
             Debug.LogError("Rigidbody is null in Tank!");
         }
 
-        // Automatically assign mantle if it exists
         Transform mantleTransform = transform.Find("Mantle");
         if (mantleTransform != null)
         {
             mantle = mantleTransform;
+            Mantle = mantleTransform;
         }
         else
         {
             Debug.LogWarning($"Mantle not found on {gameObject.name}! Make sure it has a child object named 'Mantle'.");
         }
 
-        // Optional: assign wheels only if found (not all tanks have them)
         Transform wheelsTransform = transform.Find("Wheels");
         if (wheelsTransform != null)
         {
@@ -75,9 +76,9 @@ public class Tank : MonoBehaviour
 
             transform.Rotate(Vector3.up * rotationAngle);
 
-            if (mantle != null)
+            if (Mantle != null)
             {
-                mantle.Rotate(Vector3.up * -rotationAngle);
+                Mantle.Rotate(Vector3.up * -rotationAngle);
             }
         }
 
@@ -88,34 +89,32 @@ public class Tank : MonoBehaviour
 
     protected void HandleRotateMantle(Vector3 direction)
     {
-        if (direction.magnitude > 0.01f && mantle != null)
+        if (direction.magnitude > 0.01f && Mantle != null)
         {
             Quaternion targetRotation = Quaternion.LookRotation(direction);
-            mantle.rotation = Quaternion.Slerp(mantle.rotation, targetRotation, mantleRotationSpeed * Time.deltaTime);
+            Mantle.rotation = Quaternion.Slerp(Mantle.rotation, targetRotation, mantleRotationSpeed * Time.deltaTime);
         }
     }
 
     protected void HandleRotateWheels(Vector3 directionOverride)
-{
-    if (wheels == null) return;
-
-    Vector3 direction = new Vector3(directionOverride.x, 0f, directionOverride.z);
-
-    if (direction.magnitude > 0.1f)
     {
-        Quaternion targetRotation = Quaternion.LookRotation(direction.normalized);
-        wheels.rotation = Quaternion.Slerp(wheels.rotation, targetRotation, 10f * Time.deltaTime);
-    }
-}
+        if (wheels == null) return;
 
+        Vector3 direction = new Vector3(directionOverride.x, 0f, directionOverride.z);
+        if (direction.magnitude > 0.1f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(direction.normalized);
+            wheels.rotation = Quaternion.Slerp(wheels.rotation, targetRotation, 10f * Time.deltaTime);
+        }
+    }
 
     protected void HandleShootBullet(bool IsShooting)
     {
-        if (IsShooting && shootDeltaTime > shootCooldown)
+        if (IsShooting && shootDeltaTime > shootCooldown && Mantle != null)
         {
-            Vector3 SpawnOffset = mantle.forward * 1.5f;
-            Vector3 SpawnPosition = transform.position + SpawnOffset;
-            Bullet.FireBullet(bulletPrefab, SpawnPosition, mantle.forward, shootForce, bulletLifetime);
+            Vector3 spawnOffset = Mantle.forward * 1.5f;
+            Vector3 spawnPosition = transform.position + spawnOffset;
+            Bullet.FireBullet(bulletPrefab, spawnPosition, Mantle.forward, shootForce, bulletLifetime);
             shootDeltaTime = 0;
         }
 

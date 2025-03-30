@@ -26,9 +26,10 @@ public class BlitzController : Tank
     private Vector3 currentBounceDirection;
     private bool pendingFire = false;
 
-    protected override void Start()
+    protected override void Awake()
     {
-        base.Start();
+
+        base.Awake(); // Initialize rigidbody and mantle from Tank class
 
         GameObject playerObject = GameObject.FindWithTag("Player");
         if (playerObject != null)
@@ -122,9 +123,9 @@ public class BlitzController : Tank
 
     bool IsMantleAimed(Vector3 targetDirection)
     {
-        if (mantle == null) return false;
+        if (Mantle == null) return false;
 
-        Vector3 flatForward = new Vector3(mantle.forward.x, 0, mantle.forward.z).normalized;
+        Vector3 flatForward = new Vector3(Mantle.forward.x, 0, Mantle.forward.z).normalized;
         Vector3 flatTarget = targetDirection.normalized;
 
         float angle = Vector3.Angle(flatForward, flatTarget);

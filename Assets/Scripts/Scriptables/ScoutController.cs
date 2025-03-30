@@ -8,7 +8,7 @@ public class ScoutController : MonoBehaviour
     private Transform mantle; // Reference to the mantle (auto-assigned)
     [SerializeField] private float mantleRotationSpeed = 5.0f; // Speed at which the mantle rotates
 
-    void Start()
+    void Awake()
     {
         // Find and assign the player tank
         GameObject playerObject = GameObject.FindWithTag("Player");
