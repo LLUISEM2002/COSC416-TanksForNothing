@@ -14,6 +14,7 @@ public class JamokeController : Tank
 
         // Find and assign the player tank
         GameObject playerObject = GameObject.FindWithTag("Player");
+
         if (playerObject != null)
         {
             player = playerObject.transform;
