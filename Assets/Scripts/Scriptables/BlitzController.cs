@@ -8,7 +8,6 @@ public class BlitzController : Tank
     private TankPathFollower pathFollower;
     private AStarPathfinding pathfinding;
 
-    [SerializeField] private float offsetDistance = 2.0f;
     [SerializeField] private float repathRate = 2.0f;
     private float nextPathTime = 0f;
 
@@ -28,8 +27,7 @@ public class BlitzController : Tank
 
     protected override void Awake()
     {
-
-        base.Awake(); // Initialize rigidbody and mantle from Tank class
+        base.Awake();
 
         GameObject playerObject = GameObject.FindWithTag("Player");
         if (playerObject != null)
@@ -45,7 +43,6 @@ public class BlitzController : Tank
     {
         if (player != null)
         {
-            // Rotate wheels based on path-following velocity
             if (pathFollower != null && pathFollower.CurrentVelocity != Vector3.zero)
             {
                 HandleRotateWheels(pathFollower.CurrentVelocity);
@@ -57,13 +54,11 @@ public class BlitzController : Tank
                 nextPathTime = Time.time + repathRate;
             }
 
-            // Only raycast if ready to shoot
             if (fireCooldownTimer <= 0f)
             {
                 AimWithBounceFan();
             }
 
-            // Rotate mantle and fire if aligned
             if (currentBounceDirection != Vector3.zero)
             {
                 HandleRotateMantle(currentBounceDirection);
@@ -147,14 +142,14 @@ public class BlitzController : Tank
             {
                 points.Add(hit.point);
 
-                Transform current = hit.collider.transform;
-                while (current != null)
+                Transform colliderTransform = hit.collider.transform;
+                while (colliderTransform != null)
                 {
-                    if (current.CompareTag("Player"))
+                    if (colliderTransform.CompareTag("Player"))
                     {
                         return (true, points);
                     }
-                    current = current.parent;
+                    colliderTransform = colliderTransform.parent;
                 }
 
                 currentDirection = Vector3.Reflect(currentDirection, hit.normal);
@@ -172,7 +167,7 @@ public class BlitzController : Tank
 
     void FireBouncingBullet(Vector3 shootDirection)
     {
-        if (bounceBulletPrefab != null && mantle != null)
+        if (bounceBulletPrefab != null && Mantle != null)
         {
             Vector3 spawnOffset = shootDirection.normalized * 1.5f;
             Vector3 spawnPosition = transform.position + spawnOffset;
