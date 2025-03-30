@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class TankPathFollower : MonoBehaviour
 {
-    private AStarPathfinding pathfinder; // Make it private to prevent manual assignment
+    private AStarPathfinding pathfinder;
     public float speed = 3f;
 
     private List<Node> path;
     private int pathIndex;
+
+    public Vector3 CurrentVelocity { get; private set; } = Vector3.zero;
 
     void Start()
     {
@@ -43,16 +45,20 @@ public class TankPathFollower : MonoBehaviour
         while (pathIndex < path.Count)
         {
             Vector3 targetPos = path[pathIndex].worldPosition;
-
-            // Ensure the tank only moves on XZ plane, keeping the original Y
             Vector3 movePosition = new Vector3(targetPos.x, transform.position.y, targetPos.z);
 
             while (Vector3.Distance(transform.position, movePosition) > 0.1f)
             {
+                Vector3 direction = (movePosition - transform.position).normalized;
+                CurrentVelocity = direction * speed; // Track direction for wheel rotation
+
                 transform.position = Vector3.MoveTowards(transform.position, movePosition, speed * Time.deltaTime);
                 yield return null;
             }
+
             pathIndex++;
         }
+
+        CurrentVelocity = Vector3.zero; // Stop movement tracking when done
     }
 }

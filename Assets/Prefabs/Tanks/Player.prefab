@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8306484720928713907}
   - component: {fileID: 744828645001643869}
   - component: {fileID: 4635841377685354932}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -79,7 +79,8 @@ MonoBehaviour:
   baseRotationSpeed: 100
   mantleRotationSpeed: 5
   shootCooldown: 5
-  ShootForce: 1
+  shootForce: 1
+  bulletLifetime: 10
   bulletPrefab: {fileID: 7387806552522555609, guid: 4c21d61aab8ccbb4096e950332659ea2, type: 3}
   lowResTexture: {fileID: 8400000, guid: 0d448f12dcd63cb449e1873e3927b174, type: 2}
 --- !u!1 &1119852299543151610
@@ -94,7 +95,7 @@ GameObject:
   - component: {fileID: 3192688386362757131}
   - component: {fileID: 5811687381307772129}
   - component: {fileID: 7910098479085645715}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Hole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -199,7 +200,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 799569268692223799}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Mantle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -235,7 +236,7 @@ GameObject:
   - component: {fileID: 8757610655131004709}
   - component: {fileID: 8586498666045592379}
   - component: {fileID: 1583645455385248763}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Pipe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -343,7 +344,7 @@ GameObject:
   - component: {fileID: 2781008452170650425}
   - component: {fileID: 1490298949129962684}
   - component: {fileID: 8609674637353125114}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Mantle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -448,7 +449,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1048722993857430890}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Canon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -484,7 +485,7 @@ GameObject:
   - component: {fileID: 7817452295536284583}
   - component: {fileID: 6625984271886445389}
   - component: {fileID: 6394677425373136935}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wheels
   m_TagString: Untagged
   m_Icon: {fileID: 0}

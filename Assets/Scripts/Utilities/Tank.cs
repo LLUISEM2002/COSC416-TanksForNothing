@@ -12,12 +12,16 @@ public class Tank : MonoBehaviour
     public float shootCooldown = 1;
     public float shootForce = 1;
     public float bulletLifetime = 10f;
-    public Transform Mantle { get; protected set; }
+
+    protected Transform mantle; // private use
+    public Transform Mantle { get; protected set; } // public access
+    protected Transform wheels;
+
     protected float rotationDeltaTime = 0;
     protected Vector3 targetDirection = Vector3.forward;
     protected float shootDeltaTime = 0;
-    [SerializeField] private GameObject bulletPrefab;
 
+    [SerializeField] private GameObject bulletPrefab;
 
     protected virtual void Awake()
     {
@@ -28,10 +32,21 @@ public class Tank : MonoBehaviour
             Debug.LogError("Rigidbody is null in Tank!");
         }
 
-        Mantle = transform.Find("Mantle");
-        if (Mantle == null)
+        Transform mantleTransform = transform.Find("Mantle");
+        if (mantleTransform != null)
+        {
+            mantle = mantleTransform;
+            Mantle = mantleTransform;
+        }
+        else
         {
             Debug.LogWarning($"Mantle not found on {gameObject.name}! Make sure it has a child object named 'Mantle'.");
+        }
+
+        Transform wheelsTransform = transform.Find("Wheels");
+        if (wheelsTransform != null)
+        {
+            wheels = wheelsTransform;
         }
 
         shootDeltaTime = shootCooldown;
@@ -48,7 +63,6 @@ public class Tank : MonoBehaviour
         if (rotateInput != 0)
         {
             float rotationAngle = rotateInput * baseRotationSpeed * rotationDeltaTime;
-
             rotationAngle = Mathf.Round(rotationAngle / baseRotationSnap) * baseRotationSnap;
 
             if (rotationAngle == 0)
@@ -61,6 +75,7 @@ public class Tank : MonoBehaviour
             }
 
             transform.Rotate(Vector3.up * rotationAngle);
+
             if (Mantle != null)
             {
                 Mantle.Rotate(Vector3.up * -rotationAngle);
@@ -69,7 +84,6 @@ public class Tank : MonoBehaviour
 
         Quaternion currentRotation = transform.rotation;
         float targetYRotation = Mathf.Round(currentRotation.eulerAngles.y / baseRotationSnap) * baseRotationSnap;
-
         transform.rotation = Quaternion.Euler(0, targetYRotation, 0);
     }
 
@@ -81,15 +95,29 @@ public class Tank : MonoBehaviour
             Mantle.rotation = Quaternion.Slerp(Mantle.rotation, targetRotation, mantleRotationSpeed * Time.deltaTime);
         }
     }
+
+    protected void HandleRotateWheels(Vector3 directionOverride)
+    {
+        if (wheels == null) return;
+
+        Vector3 direction = new Vector3(directionOverride.x, 0f, directionOverride.z);
+        if (direction.magnitude > 0.1f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(direction.normalized);
+            wheels.rotation = Quaternion.Slerp(wheels.rotation, targetRotation, 10f * Time.deltaTime);
+        }
+    }
+
     protected void HandleShootBullet(bool IsShooting)
     {
-        if (IsShooting && shootDeltaTime > shootCooldown)
+        if (IsShooting && shootDeltaTime > shootCooldown && Mantle != null)
         {
-            Vector3 SpawnOffset = Mantle.forward * 1.5f; // Adjust 1.5f to push it farther or closer
-            Vector3 SpawnPosition = transform.position + SpawnOffset;
-            Bullet.FireBullet(bulletPrefab, SpawnPosition, Mantle.forward, shootForce, bulletLifetime);
+            Vector3 spawnOffset = Mantle.forward * 1.5f;
+            Vector3 spawnPosition = transform.position + spawnOffset;
+            Bullet.FireBullet(bulletPrefab, spawnPosition, Mantle.forward, shootForce, bulletLifetime);
             shootDeltaTime = 0;
         }
+
         shootDeltaTime += Time.deltaTime;
     }
 }
