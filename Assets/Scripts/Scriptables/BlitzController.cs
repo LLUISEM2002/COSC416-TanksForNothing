@@ -172,7 +172,7 @@ public class BlitzController : Tank
             Vector3 spawnOffset = shootDirection.normalized * 1.5f;
             Vector3 spawnPosition = transform.position + spawnOffset;
 
-            Bullet.FireBullet(bounceBulletPrefab, spawnPosition, shootDirection, bulletSpeed, bulletLifetime);
+            Bullet.FireBullet(bounceBulletPrefab, spawnPosition, shootDirection, bulletSpeed, bulletLifetime, maxBounces);
         }
     }
 }
