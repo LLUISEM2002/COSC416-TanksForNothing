@@ -1447,8 +1447,12 @@ PrefabInstance:
       value: Blitz
       objectReference: {fileID: 0}
     - target: {fileID: 7028561619441599113, guid: e90cdb27ccdd5e6459dd46758c5b4b67, type: 3}
+      propertyPath: maxBounces
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7028561619441599113, guid: e90cdb27ccdd5e6459dd46758c5b4b67, type: 3}
       propertyPath: bulletSpeed
-      value: 5
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7028561619441599113, guid: e90cdb27ccdd5e6459dd46758c5b4b67, type: 3}
       propertyPath: shootCooldown
@@ -1460,7 +1464,7 @@ PrefabInstance:
       objectReference: {fileID: 7387806552522555609, guid: 4c21d61aab8ccbb4096e950332659ea2, type: 3}
     - target: {fileID: 7028561619441599113, guid: e90cdb27ccdd5e6459dd46758c5b4b67, type: 3}
       propertyPath: mantleRotationSpeed
-      value: 10
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 7028561619441599113, guid: e90cdb27ccdd5e6459dd46758c5b4b67, type: 3}
       propertyPath: wallAndPlayerMask.m_Bits

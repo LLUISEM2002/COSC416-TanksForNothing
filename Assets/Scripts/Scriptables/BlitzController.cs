@@ -92,7 +92,7 @@ public class BlitzController : Tank
         Vector3 origin = transform.position + Vector3.up * 0.5f;
         Vector3 baseDirection = (player.position - transform.position).normalized;
 
-        float[] angles = { -90f, -60f, -30f, 0f, 30f, 60f, 90f };
+        float[] angles = { -90f, -75f, -60f, -45f, -30f, -15f, 0f, 15f, 30f, 45f, 60f, 75f, 90f };
 
         foreach (float angle in angles)
         {
