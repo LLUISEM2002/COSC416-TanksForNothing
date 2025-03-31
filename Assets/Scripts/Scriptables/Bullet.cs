@@ -9,6 +9,8 @@ public class Bullet : MonoBehaviour
 
     private Rigidbody rb;
 
+    private bool hasCollided = false;
+
     public void Initialize(float speed, Vector3 direction, float lifetime, int maxBounces)
     {
         rb = GetComponent<Rigidbody>();
@@ -36,8 +38,12 @@ public class Bullet : MonoBehaviour
         // Instantiate(explosionParticle, transform.position, transform.rotation);
         Debug.Log(collision.gameObject);
 
+        if (hasCollided) return;
+        hasCollided = true;
+
         if (collision.gameObject.CompareTag("Tank"))
         {
+                Debug.Log("Collided with TANK: " + collision.gameObject.name + ", bullet: " + gameObject.name);
             if (mapController != null)
             {
                 mapController.OnJamokeDone();
@@ -63,6 +69,8 @@ public class Bullet : MonoBehaviour
             if (currentBounces > maxBounces)
             {
                 Destroy(gameObject);
+            }else {
+                hasCollided = false;
             }
         }
     }
