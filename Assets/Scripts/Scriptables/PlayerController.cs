@@ -30,7 +30,7 @@ public class PlayerController : Tank
             textureScaleFactor = Vector2.one; // Default to no scaling if no texture is provided
         }
 
-        shootForce = 5;
+        shootForce = 10f;
     }
     void Update()
     {

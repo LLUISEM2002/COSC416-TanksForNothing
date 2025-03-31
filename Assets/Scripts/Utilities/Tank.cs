@@ -10,7 +10,8 @@ public class Tank : MonoBehaviour
     public float baseRotationSpeed = 100;
     public float mantleRotationSpeed = 5;
     public float shootCooldown = 1;
-    public float shootForce = 1;
+    public float shootForce = 10;
+    public int bulletMaxBounce = 3;
     public float bulletLifetime = 10f;
 
     protected Transform mantle; // private use
@@ -114,7 +115,7 @@ public class Tank : MonoBehaviour
         {
             Vector3 spawnOffset = Mantle.forward * 1.5f;
             Vector3 spawnPosition = transform.position + spawnOffset;
-            Bullet.FireBullet(bulletPrefab, spawnPosition, Mantle.forward, shootForce, bulletLifetime);
+            Bullet.FireBullet(bulletPrefab, spawnPosition, Mantle.forward, shootForce, bulletLifetime, bulletMaxBounce);
             shootDeltaTime = 0;
         }
 
