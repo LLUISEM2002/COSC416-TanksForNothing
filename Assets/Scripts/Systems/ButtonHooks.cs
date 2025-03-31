@@ -1,17 +1,12 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 public class ButtonHooks : MonoBehaviour
 {
-    public void LoadNextScene()
+     public void LoadNextScene()
     {
-        MapController map = FindObjectOfType<MapController>(); // Get instance in the scene
-        if (map != null)
-        {
-            map.GoToNextMap("map1");
-        }
-        else
-        {
-            Debug.LogError("MapController not found in the scene!");
-        }
+        Debug.Log("Play clicked!");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }
