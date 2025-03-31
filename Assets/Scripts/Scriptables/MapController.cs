@@ -31,11 +31,12 @@ public class MapController : MonoBehaviour
 
         if (jamokeCount <= 0)
         {
-             if (SceneManager.GetActiveScene().buildIndex == 4)
+             if (SceneManager.GetActiveScene().buildIndex == 5)
             {
                 // We are on the last map (Map5). 
                 // No more transitions. Possibly show a "Victory" message or do nothing.
                 Debug.Log("All jamokes destroyed on final map! Game Over / Victory!");
+                SceneManager.LoadScene(6);
             }else{
                 Debug.Log("All jamokes destroyed! Loading next level...");
                 StartCoroutine(LoadNextLevel(SceneManager.GetActiveScene().buildIndex + 1));
