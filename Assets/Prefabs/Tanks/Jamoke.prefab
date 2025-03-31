@@ -436,9 +436,12 @@ MonoBehaviour:
   baseRotationSpeed: 100
   mantleRotationSpeed: 5
   shootCooldown: 5
-  shootForce: 1
+  shootForce: 10
+  bulletMaxBounce: 3
+  bulletLifetime: 10
   bulletPrefab: {fileID: 7387806552522555609, guid: 4c21d61aab8ccbb4096e950332659ea2, type: 3}
   offsetDistance: 4
+  fireRate: 5
 --- !u!1 &7430522259193726206
 GameObject:
   m_ObjectHideFlags: 0

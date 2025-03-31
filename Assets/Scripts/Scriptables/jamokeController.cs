@@ -4,17 +4,19 @@ using UnityEngine;
 
 public class JamokeController : Tank
 {
-    private Transform player; // Reference to the player tank
+    private Transform player;
 
-    [SerializeField] private float offsetDistance = 2.0f; // Fixed offset in front of the player's forward direction
+    [SerializeField] private float offsetDistance = 2.0f;
+
+    [Header("Shooting Settings")]
+    [SerializeField] private float fireRate = 2f; // Seconds between shots
+    private float shootTimer = 0f;
 
     protected override void Awake()
     {
-        base.Awake(); // Call the Tank class's Start() to assign mantle and rigidbody
+        base.Awake();
 
-        // Find and assign the player tank
         GameObject playerObject = GameObject.FindWithTag("Player");
-
         if (playerObject != null)
         {
             player = playerObject.transform;
@@ -27,11 +29,25 @@ public class JamokeController : Tank
 
     void Update()
     {
-        if (player != null)
+        if (player == null) return;
+
+        RotateMantleTowardsOffsetPosition();
+
+        shootDeltaTime += Time.deltaTime;
+
+        if (shootDeltaTime > shootCooldown)
         {
-            RotateMantleTowardsOffsetPosition();
+            Debug.Log("Jamoke shooting!");
+            HandleShootBullet(true); 
+            shootDeltaTime = 0f;
+        }
+        else
+        {
+            float timeLeft = shootCooldown - shootDeltaTime;
+            Debug.Log($"Jamoke cooldown: {timeLeft:F2} seconds remaining");
         }
     }
+
 
     void RotateMantleTowardsOffsetPosition()
     {
@@ -40,5 +56,14 @@ public class JamokeController : Tank
         direction.y = 0;
 
         HandleRotateMantle(direction);
+    }
+
+    void TryShootAtMantleDirection()
+    {
+        // Only try to shoot if Mantle is assigned and roughly aimed at the player
+        if (Mantle != null)
+        {
+            HandleShootBullet(true);
+        }
     }
 }
