@@ -8,9 +8,10 @@ public class JamokeController : Tank
 
     [SerializeField] private float offsetDistance = 2.0f;
 
-    [Header("Shooting Settings")]
-    [SerializeField] private float fireRate = 2f; // Seconds between shots
-    private float shootTimer = 0f;
+    [SerializeField] private float initialShootDelay = 1f;
+    private float timeSinceSpawn = 0f;
+
+    [SerializeField] private LayerMask wallAndPlayerMask;
 
     protected override void Awake()
     {
@@ -31,15 +32,23 @@ public class JamokeController : Tank
     {
         if (player == null) return;
 
+        timeSinceSpawn += Time.deltaTime;
+
         RotateMantleTowardsOffsetPosition();
+
+        // Wait before allowing the Jamoke to shoot
+        if (timeSinceSpawn < initialShootDelay) return;
 
         shootDeltaTime += Time.deltaTime;
 
         if (shootDeltaTime > shootCooldown)
         {
-            Debug.Log("Jamoke shooting!");
-            HandleShootBullet(true); 
-            shootDeltaTime = 0f;
+            if (HasLineOfSightToPlayer() && IsMantleAimedAtPlayer())
+            {
+                Debug.Log("Jamoke shooting!");
+                HandleShootBullet(true);
+                shootDeltaTime = 0f;
+            }
         }
         else
         {
@@ -47,7 +56,6 @@ public class JamokeController : Tank
             Debug.Log($"Jamoke cooldown: {timeLeft:F2} seconds remaining");
         }
     }
-
 
     void RotateMantleTowardsOffsetPosition()
     {
@@ -58,12 +66,45 @@ public class JamokeController : Tank
         HandleRotateMantle(direction);
     }
 
-    void TryShootAtMantleDirection()
+    bool HasLineOfSightToPlayer()
     {
-        // Only try to shoot if Mantle is assigned and roughly aimed at the player
-        if (Mantle != null)
+        Vector3 origin = Mantle.position;
+        Vector3 direction = (player.position - origin).normalized;
+        float distance = Vector3.Distance(origin, player.position);
+
+        if (Physics.Raycast(origin, direction, out RaycastHit hit, distance, wallAndPlayerMask))
         {
-            HandleShootBullet(true);
+            bool hitPlayer = false;
+
+            Transform current = hit.transform;
+            while (current != null)
+            {
+                if (current.CompareTag("Player"))
+                {
+                    hitPlayer = true;
+                    break;
+                }
+                current = current.parent;
+            }
+
+            Debug.DrawLine(origin, hit.point, hitPlayer ? Color.red : Color.blue, 0.1f);
+            return hitPlayer;
         }
+
+        // Raycast didn’t hit anything at all — draw a gray line
+        Debug.DrawLine(origin, origin + direction * distance, Color.gray, 0.1f);
+        return false;
+    }
+
+    bool IsMantleAimedAtPlayer()
+    {
+        if (Mantle == null) return false;
+
+        Vector3 toPlayer = (player.position - Mantle.position).normalized;
+        Vector3 flatForward = new Vector3(Mantle.forward.x, 0, Mantle.forward.z).normalized;
+        Vector3 flatTarget = new Vector3(toPlayer.x, 0, toPlayer.z).normalized;
+
+        float angle = Vector3.Angle(flatForward, flatTarget);
+        return angle < 5f;
     }
 }

@@ -441,7 +441,10 @@ MonoBehaviour:
   bulletLifetime: 10
   bulletPrefab: {fileID: 7387806552522555609, guid: 4c21d61aab8ccbb4096e950332659ea2, type: 3}
   offsetDistance: 4
-  fireRate: 5
+  initialShootDelay: 1
+  wallAndPlayerMask:
+    serializedVersion: 2
+    m_Bits: 192
 --- !u!1 &7430522259193726206
 GameObject:
   m_ObjectHideFlags: 0
