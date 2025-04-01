@@ -61,6 +61,11 @@ public class Bullet : MonoBehaviour
             Destroy(gameObject);
             Destroy(collision.gameObject);
             Debug.Log("Player hit by bullet! GAME OVER!");
+
+            if (mapController != null)
+            {
+                mapController.OnPlayerDestroyed();
+            }
         }
         else
         {
