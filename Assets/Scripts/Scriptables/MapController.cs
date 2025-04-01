@@ -7,6 +7,7 @@ public class MapController : MonoBehaviour
     public Animator transitionAnim;
     private int jamokeCount;
     private static MapController instance;
+    public static int lastMapIndex = -1;
 
     private void Awake()
     {
@@ -24,6 +25,16 @@ public class MapController : MonoBehaviour
         Debug.Log("Scene loaded: " + scene.name + " - Jamoke count: " + jamokeCount);
     
     }
+
+    public void OnPlayerDestroyed()
+    {
+        Debug.Log("Player destroyed! Game Over scene loading...");
+        //StartCoroutine(LoadNextLevel("GameOver"));
+        MapController.lastMapIndex = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(7);
+    }
+
+
 
     // Called from your Jamoke when it's destroyed
     public void OnJamokeDone()
@@ -90,6 +101,12 @@ public class MapController : MonoBehaviour
             transitionAnim.SetTrigger("Start");
         }
     }
+
+    // public void LoadCurrentScene(int sceneIndex)
+    // {
+    //     Debug.Log("Reloading current scene: " + sceneIndex);
+    //     SceneManager.LoadScene(sceneIndex);
+    // }
 
 }
 
