@@ -435,7 +435,7 @@ MonoBehaviour:
   baseRotationSnap: 15
   baseRotationSpeed: 100
   mantleRotationSpeed: 5
-  shootCooldown: 5
+  shootCooldown: 3
   shootForce: 10
   bulletMaxBounce: 3
   bulletLifetime: 10
