@@ -45,9 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7019bc451a784f948873f16e4c90f040, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridWidth: 100
-  gridHeight: 60
-  nodeSize: 0.5
+  gridWidth: 50
+  gridHeight: 30
+  nodeSize: 1
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 128
