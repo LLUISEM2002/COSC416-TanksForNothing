@@ -6,6 +6,8 @@ public class MapController : MonoBehaviour
 {
     public Animator transitionAnim;
     private int jamokeCount;
+    private static MapController instance;
+    public static int lastMapIndex = -1;
 
     private void Awake()
     {
@@ -21,7 +23,18 @@ public class MapController : MonoBehaviour
         GameObject[] jamokeObjects = GameObject.FindGameObjectsWithTag("Tank");
         jamokeCount = jamokeObjects.Length;
         Debug.Log("Scene loaded: " + scene.name + " - Jamoke count: " + jamokeCount);
+    
     }
+
+    public void OnPlayerDestroyed()
+    {
+        Debug.Log("Player destroyed! Game Over scene loading...");
+        //StartCoroutine(LoadNextLevel("GameOver"));
+        MapController.lastMapIndex = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(7);
+    }
+
+
 
     // Called from your Jamoke when it's destroyed
     public void OnJamokeDone()
@@ -67,15 +80,33 @@ public class MapController : MonoBehaviour
     // Overload for int index if you prefer
     private IEnumerator LoadNextLevel(int sceneBuildIndex)
     {
-        // 1) Fade Out
-        transitionAnim.SetTrigger("End");
+        Debug.Log("🚪 Starting scene transition to build index: " + sceneBuildIndex);
+
+        if (transitionAnim == null)
+        {
+            Debug.LogError("❌ transitionAnim is NULL before fade-out!");
+        }
+        else
+        {
+            Debug.Log("✅ transitionAnim found: " + transitionAnim.name);
+            transitionAnim.SetTrigger("End");
+        }
+
         yield return new WaitForSeconds(1f);
 
-        // 2) Load scene by index
         SceneManager.LoadScene(sceneBuildIndex);
 
-        // 3) Fade In
-        transitionAnim.SetTrigger("Start");
+        if (transitionAnim != null)
+        {
+            transitionAnim.SetTrigger("Start");
+        }
     }
+
+    // public void LoadCurrentScene(int sceneIndex)
+    // {
+    //     Debug.Log("Reloading current scene: " + sceneIndex);
+    //     SceneManager.LoadScene(sceneIndex);
+    // }
+
 }
 
